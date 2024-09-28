@@ -1,6 +1,7 @@
 name: CI/CD
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -21,16 +22,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup node js
-        uses: ./.github/workflows/setup-node
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build next
+        run: npm run build
 
       - name: Setup pages
         uses: actions/configure-pages@v4
-        with:
-          static_site_generator: next
-
-      - name: Build next
-        run: npx next build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
