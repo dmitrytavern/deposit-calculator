@@ -16,6 +16,8 @@ export class CalculatorStore {
   private readonly _form: Form
   private _result: FormResult | undefined
 
+  public readonly currencies: [string, string][]
+
   constructor() {
     this._result = undefined
     this._formErrors = {}
@@ -29,7 +31,14 @@ export class CalculatorStore {
       replenishment: 1000,
       replenishmentIsActive: false,
       capitalizationIsActive: false,
+      currency: 'UAH',
     }
+
+    this.currencies = [
+      ['UAH', '₴'],
+      ['USD', '$'],
+      ['EUR', '€'],
+    ]
 
     for (const key in this._form) {
       this.validateField(key as FormFieldKeys)
@@ -56,6 +65,12 @@ export class CalculatorStore {
 
   get resultIsValid(): boolean {
     return !!this._result
+  }
+
+  get currencySymbol(): string {
+    const currency = this.currencies.find((v) => v[0] === this._form.currency)
+    if (!currency) return '?'
+    return currency[1]
   }
 
   public getField<Field extends FormFieldKeys>(field: Field): FormField<Field> {

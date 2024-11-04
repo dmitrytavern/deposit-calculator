@@ -62,4 +62,6 @@ export const formSchema = z.object({
   taxIsActive: z.boolean(),
   replenishmentIsActive: z.boolean(),
   capitalizationIsActive: z.boolean(),
+
+  currency: z.string(),
 })

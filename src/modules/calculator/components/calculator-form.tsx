@@ -1,7 +1,14 @@
 import { useState } from 'react'
 
 import { CalendarDate, parseDate } from '@internationalized/date'
-import { Checkbox, DatePicker, Input, Spacer } from '@nextui-org/react'
+import {
+  Checkbox,
+  DatePicker,
+  Input,
+  Select,
+  SelectItem,
+  Spacer,
+} from '@nextui-org/react'
 import { observer } from 'mobx-react-lite'
 
 import { useCalculator } from '../use-calculator'
@@ -20,6 +27,7 @@ export const CalculatorForm = observer(function CalculatorForm() {
   const replenishment = store.getField('replenishment')
   const replenishmentIsActive = store.getField('replenishmentIsActive')
   const capitalizationIsActive = store.getField('capitalizationIsActive')
+  const currency = store.getField('currency')
 
   const [dateValue, setDateValue] = useState(
     parseDate(date.value.toISOString().split('T')[0]),
@@ -34,6 +42,43 @@ export const CalculatorForm = observer(function CalculatorForm() {
 
   return (
     <div>
+      <div className="flex">
+        <Input
+          size="sm"
+          variant="bordered"
+          type="number"
+          label="Amount"
+          placeholder="Enter your amount"
+          inputMode="decimal"
+          min={1}
+          max={Number.MAX_SAFE_INTEGER}
+          isRequired
+          isInvalid={amount.error}
+          errorMessage={amount.errorMessage}
+          value={numericValue(amount.value)}
+          onValueChange={(value) => amount.onChange(+value)}
+        />
+
+        <Spacer x={4} />
+
+        <Select
+          size="sm"
+          variant="bordered"
+          label="Валюта"
+          className="max-w-28"
+          isInvalid={currency.error}
+          errorMessage={currency.errorMessage}
+          selectedKeys={[currency.value]}
+          onChange={(e) => currency.onChange(e.target.value)}
+        >
+          {store.currencies.map((value) => (
+            <SelectItem key={value[0]}>{value[0]}</SelectItem>
+          ))}
+        </Select>
+      </div>
+
+      <Spacer y={4} />
+
       <Input
         size="sm"
         variant="bordered"
@@ -83,24 +128,6 @@ export const CalculatorForm = observer(function CalculatorForm() {
         errorMessage={date.errorMessage}
         value={dateValue}
         onChange={onDatePickerChange}
-      />
-
-      <Spacer y={4} />
-
-      <Input
-        size="sm"
-        variant="bordered"
-        type="number"
-        label="Amount"
-        placeholder="Enter your amount"
-        inputMode="decimal"
-        min={1}
-        max={Number.MAX_SAFE_INTEGER}
-        isRequired
-        isInvalid={amount.error}
-        errorMessage={amount.errorMessage}
-        value={numericValue(amount.value)}
-        onValueChange={(value) => amount.onChange(+value)}
       />
 
       <Spacer y={4} />

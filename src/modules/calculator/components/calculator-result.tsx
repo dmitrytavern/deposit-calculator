@@ -5,6 +5,11 @@ import { useCalculator } from '../use-calculator'
 
 const toFixed = (number: number) => +number.toFixed(2)
 
+const numberWithSpaces = (number: number): string =>
+  number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+
+const formatNumber = (number: number) => numberWithSpaces(toFixed(number))
+
 export const CalculatorResult = observer(function CalculatorResult() {
   const { store } = useCalculator()
 
@@ -14,7 +19,7 @@ export const CalculatorResult = observer(function CalculatorResult() {
     <>
       <p>Вы получили:</p>
       <p className="text-4xl font-semibold">
-        ${toFixed(store.result.totalAmount)}
+        {store.currencySymbol} {formatNumber(store.result.totalAmount)}
       </p>
       <Spacer y={4} />
 
@@ -23,19 +28,19 @@ export const CalculatorResult = observer(function CalculatorResult() {
 
       <p>Вложено</p>
       <p className="text-2xl font-medium">
-        ${toFixed(store.result.totalInvestedAmount)}
+        {store.currencySymbol} {formatNumber(store.result.totalInvestedAmount)}
       </p>
       <Spacer y={4} />
 
       <p>Полученно процентов</p>
       <p className="text-2xl font-medium">
-        ${toFixed(store.result.totalPercentAmount)}
+        {store.currencySymbol} {formatNumber(store.result.totalPercentAmount)}
       </p>
       <Spacer y={4} />
 
       <p>Процентная ставка</p>
       <p className="text-2xl font-medium">
-        {toFixed(store.result.rate)}% годовых
+        {formatNumber(store.result.rate)}% годовых
       </p>
       <Spacer y={4} />
 
@@ -43,12 +48,12 @@ export const CalculatorResult = observer(function CalculatorResult() {
         <>
           <p>Процентная ставка после оплаты налогов</p>
           <p className="text-2xl font-medium">
-            {toFixed(store.result.rateAfterTax)}% годовых
+            {formatNumber(store.result.rateAfterTax)}% годовых
           </p>
           <Spacer y={4} />
           <p>Оплачено налогов</p>
           <p className="text-2xl font-medium">
-            ${toFixed(store.result.totalTaxAmount)}
+            {store.currencySymbol} {formatNumber(store.result.totalTaxAmount)}
           </p>
         </>
       )}
