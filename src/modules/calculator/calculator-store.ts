@@ -1,77 +1,89 @@
 import { makeAutoObservable, runInAction } from 'mobx'
-import { z } from 'zod'
 
 import { formSchema } from './schemas'
-
-type StateSchema = z.infer<typeof formSchema>
-type StateFields = keyof typeof formSchema.shape
-type State = {
-  readonly [Property in StateFields]: {
-    value: StateSchema[Property]
-    error?: boolean
-    errorMessage?: string | undefined
-  }
-}
+import type {
+  Form,
+  FormErrors,
+  FormResult,
+  FormField,
+  FormFieldKeys,
+  FormFieldSchema,
+} from './types'
+import { calculate } from './utils/calculation'
 
 export class CalculatorStore {
-  private readonly state: State
+  private readonly _formErrors: FormErrors
+  private readonly _form: Form
+  private _result: FormResult | undefined
 
   constructor() {
-    this.state = {
-      rate: { value: 14.5 },
-      period: { value: 12 },
-      amount: { value: 1000 },
-      date: { value: new Date() },
-      tax: { value: 19.5 },
-      taxIsActive: { value: false },
-      replenishment: { value: 1000 },
-      replenishmentIsActive: { value: false },
-      capitalizationIsActive: { value: false },
+    this._result = undefined
+    this._formErrors = {}
+    this._form = {
+      rate: 14.5,
+      period: 12,
+      amount: 1000,
+      date: new Date(),
+      tax: 19.5,
+      taxIsActive: false,
+      replenishment: 1000,
+      replenishmentIsActive: false,
+      capitalizationIsActive: false,
     }
 
-    for (const key in this.state) {
-      this.validateField(key as StateFields)
+    for (const key in this._form) {
+      this.validateField(key as FormFieldKeys)
     }
+
+    this.calculate()
 
     makeAutoObservable(this)
   }
 
-  get stateForm(): StateSchema {
-    return {
-      rate: this.state.rate.value,
-      period: this.state.period.value,
-      amount: this.state.amount.value,
-      date: this.state.date.value,
-      tax: this.state.tax.value,
-      taxIsActive: this.state.taxIsActive.value,
-      replenishment: this.state.replenishment.value,
-      replenishmentIsActive: this.state.replenishmentIsActive.value,
-      capitalizationIsActive: this.state.capitalizationIsActive.value,
-    }
+  get form(): Form {
+    return { ...this._form }
   }
 
-  get stateFormIsValid(): boolean {
-    for (const key in this.state)
-      if (this.state[key as StateFields].error) return false
+  get formIsValid(): boolean {
+    for (const key in this._formErrors)
+      if (this._formErrors[key as FormFieldKeys]?.error) return false
     return true
   }
 
-  public getField<Field extends StateFields>(
-    field: Field,
-  ): State[Field] & { onChange(value: StateSchema[Field]): void } {
-    const onChange = (value: StateSchema[Field]) => {
-      runInAction(() => {
-        this.state[field].value = value
-      })
-      this.validateField(field)
-    }
-
-    return { ...this.state[field], onChange }
+  get result(): Readonly<FormResult> | undefined {
+    return this._result
   }
 
-  private validateField<Field extends StateFields>(field: Field) {
-    const error = formSchema.shape[field].safeParse(this.state[field].value)
-    this.state[field].error = !error.success
-    this.state[field].errorMessage = error.error?.issues[0].message
+  get resultIsValid(): boolean {
+    return !!this._result
+  }
+
+  public getField<Field extends FormFieldKeys>(field: Field): FormField<Field> {
+    return {
+      value: this._form[field],
+      error: this._formErrors[field]?.error,
+      errorMessage: this._formErrors[field]?.errorMessage,
+      onChange: (value: FormFieldSchema<Field>) =>
+        runInAction(() => {
+          this._form[field] = value
+          this.validateField(field)
+          this.calculate()
+        }),
+    }
+  }
+
+  private validateField<Field extends FormFieldKeys>(field: Field) {
+    const value = this._form[field]
+    const error = formSchema.shape[field].safeParse(value)
+    this._formErrors[field] = {
+      error: !error.success,
+      errorMessage: error.error?.issues[0].message,
+    }
+  }
+
+  private calculate() {
+    if (this.formIsValid) {
+      this._result = calculate(this.form)
+    }
   }
 }

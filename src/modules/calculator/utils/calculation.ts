@@ -1,143 +1,118 @@
-import { z } from 'zod'
+import { isLeapYear } from '@/uitls/date'
 
-import { daysInMonth, isLeapYear } from '@/uitls/date'
+import { Calculation, FormResult, FormSchema } from '../types'
 
-import { formSchema } from '../schemas'
+const calculatePeriod = (form: Readonly<FormSchema>, monthIndex: number) => {
+  const initialYear = form.date.getFullYear()
+  const initialMonth = form.date.getMonth() + 1
+  const initialDay = form.date.getDate()
+  const currentDate = new Date(initialYear, initialMonth + monthIndex, 0)
 
-type StateSchema = z.infer<typeof formSchema>
+  const maxDate = currentDate.getDate()
+  const date = initialDay > maxDate ? maxDate : initialDay
 
-type Period = {
-  year: number
-  month: number
-  startDate: number
-  endDate: number
-  days: number
+  const year = currentDate.getFullYear()
+  const month = currentDate.getMonth() + 1
+
+  let startWorkDay = 1
+  let endWorkDay = maxDate
+
+  if (monthIndex === 0) startWorkDay = date + 1
+  if (monthIndex === 0 && date === maxDate) return
+
+  if (monthIndex === form.period) endWorkDay = date - 1
+  if (monthIndex === form.period && date === 1) return
+
+  const workDays = endWorkDay - startWorkDay + 1
+
+  return { year, month, workDays, startWorkDay, endWorkDay }
 }
 
-type Calculation = {
-  invested: number
-  balance: number
-  income: number
-  tax: number
+const calculateInvestment = (
+  form: Readonly<FormSchema>,
+  monthIndex: number,
+) => {
+  return monthIndex !== 0 && form.replenishmentIsActive ? form.replenishment : 0
 }
 
-function calculatePeriods(form: Readonly<StateSchema>): Period[] {
-  const periods = []
-  const formDateYear = form.date.getFullYear()
-  const formDateMonth = form.date.getMonth()
-  const formDateDays = form.date.getDate()
+const calculateBalance = (
+  form: Readonly<FormSchema>,
+  investment: number,
+  previosCalculation: Calculation | undefined,
+) => {
+  let balance: number = previosCalculation
+    ? previosCalculation.balance
+    : form.amount
 
-  for (let i = 0; i <= form.period; i++) {
-    const maxDays = daysInMonth(formDateYear, formDateMonth + 1 + i)
+  if (form.replenishmentIsActive) balance += investment
 
-    const currentDate = new Date(
-      formDateYear,
-      formDateMonth + i,
-      formDateDays > maxDays ? maxDays : formDateDays,
-    )
+  if (form.capitalizationIsActive)
+    balance += previosCalculation ? previosCalculation.income : 0
 
-    const year = currentDate.getFullYear()
-    const month = currentDate.getMonth() + 1
-    const date = currentDate.getDate()
+  if (form.capitalizationIsActive && form.taxIsActive)
+    balance -= previosCalculation ? previosCalculation.tax : 0
 
-    let startDate = 1
-    let endDate = maxDays
-
-    if (i === 0 && date === maxDays) continue
-    if (i === form.period && date === 1) continue
-
-    if (i === 0) startDate = date + 1
-    if (i === form.period) endDate = date - 1
-
-    const days = endDate - startDate + 1
-
-    periods.push({
-      year,
-      month,
-      startDate,
-      endDate,
-      days,
-    })
-  }
-
-  return periods
+  return balance
 }
 
-function calculateDeposit(
-  form: Readonly<StateSchema>,
-  periods: Period[],
-): Calculation[] {
+const calculateRate = (form: Readonly<FormSchema>) => {
+  return form.rate
+}
+
+const calculateTaxRate = (form: Readonly<FormSchema>) => {
+  return form.taxIsActive ? form.rate * (form.tax / 100) : 0
+}
+
+const calculateIncomePerDay = (year: number, rate: number, balance: number) => {
+  return (balance * (rate / 100)) / (isLeapYear(year) ? 366 : 365)
+}
+
+export function calculate(form: Readonly<FormSchema>): FormResult {
   const calculations: Calculation[] = []
 
-  for (const period of periods) {
-    const invested: number =
-      calculations.length && form.replenishmentIsActive ? form.replenishment : 0
+  const rate = calculateRate(form)
+  const taxRate = calculateTaxRate(form)
+  let totalTaxAmount = 0
+  let totalPercentAmount = 0
+  let totalInvestedAmount = form.amount
 
-    let balance: number = calculations.length
-      ? calculations[calculations.length - 1].balance
-      : form.amount
+  for (let monthIndex = 0; monthIndex <= form.period; monthIndex++) {
+    const period = calculatePeriod(form, monthIndex)
 
-    if (calculations.length && form.capitalizationIsActive)
-      balance += calculations[calculations.length - 1].income
+    if (!period) continue
 
-    if (calculations.length && form.capitalizationIsActive && form.taxIsActive)
-      balance -= calculations[calculations.length - 1].tax
+    const investment = calculateInvestment(form, monthIndex)
 
-    if (calculations.length && form.replenishmentIsActive) balance += invested
+    const balance = calculateBalance(
+      form,
+      investment,
+      calculations[calculations.length - 1],
+    )
 
-    const rate = form.rate
+    const incomePerDay = calculateIncomePerDay(period.year, rate, balance)
 
-    const incomePerDay =
-      (balance * (rate / 100)) / (isLeapYear(period.year) ? 366 : 365)
+    const income = incomePerDay * period.workDays
 
-    const income = incomePerDay * period.days
+    const taxPerDay = calculateIncomePerDay(period.year, taxRate, balance)
 
-    let tax = 0
+    const tax = taxPerDay * period.workDays
 
-    if (form.taxIsActive) {
-      const taxPerDay =
-        (balance * ((rate * (form.tax / 100)) / 100)) /
-        (isLeapYear(period.year) ? 366 : 365)
+    calculations.push({ ...period, balance, income, tax, investment })
 
-      tax = taxPerDay * period.days
-    }
-
-    calculations.push({
-      invested,
-      balance,
-      income,
-      tax,
-    })
+    totalTaxAmount += tax
+    totalPercentAmount += income
+    totalInvestedAmount += investment
   }
 
-  return calculations
-}
-
-export function calculate(form: Readonly<StateSchema>) {
-  const periods = calculatePeriods(form)
-  const calculations = calculateDeposit(form, periods)
-
-  let investedAmount = form.amount
-  let totalAmount = 0
-  let taxAmount = 0
-  const rate = form.rate
-  const rateAfterTax = form.taxIsActive
-    ? form.rate - form.rate * (form.tax / 100)
-    : 0
-
-  for (const calculation of calculations) {
-    taxAmount += calculation.tax
-    totalAmount += calculation.income
-    investedAmount += calculation.invested
-  }
+  const rateAfterTax = rate - taxRate
+  const totalAmount = totalInvestedAmount + totalPercentAmount - totalTaxAmount
 
   return {
     rate,
     rateAfterTax,
-    investedAmount,
     totalAmount,
-    taxAmount,
-    calculations,
-    periods,
+    totalTaxAmount,
+    totalPercentAmount,
+    totalInvestedAmount,
   }
 }

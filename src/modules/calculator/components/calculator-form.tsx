@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { parseDate } from '@internationalized/date'
+import { CalendarDate, parseDate } from '@internationalized/date'
 import { Checkbox, DatePicker, Input, Spacer } from '@nextui-org/react'
 import { observer } from 'mobx-react-lite'
 
@@ -21,9 +21,16 @@ export const CalculatorForm = observer(function CalculatorForm() {
   const replenishmentIsActive = store.getField('replenishmentIsActive')
   const capitalizationIsActive = store.getField('capitalizationIsActive')
 
-  const [_date, _setDate] = useState(
+  const [dateValue, setDateValue] = useState(
     parseDate(date.value.toISOString().split('T')[0]),
   )
+
+  const onDatePickerChange = (data: CalendarDate) => {
+    setDateValue(data)
+    if (data) {
+      date.onChange(new Date(data.year, data.month - 1, data.day))
+    }
+  }
 
   return (
     <div>
@@ -70,15 +77,12 @@ export const CalculatorForm = observer(function CalculatorForm() {
 
       <DatePicker
         size="sm"
-        label="Start date"
         variant="bordered"
-        value={_date}
+        label="Start date"
         isInvalid={date.error}
         errorMessage={date.errorMessage}
-        onChange={(data) => {
-          _setDate(data)
-          if (data) date.onChange(new Date(data.year, data.month - 1, data.day))
-        }}
+        value={dateValue}
+        onChange={onDatePickerChange}
       />
 
       <Spacer y={4} />
