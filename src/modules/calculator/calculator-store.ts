@@ -9,7 +9,7 @@ import type {
   FormFieldKeys,
   FormFieldSchema,
 } from './types'
-import { calculate } from './utils/calculation'
+import { calculate } from './utilities/calculate'
 
 export class CalculatorStore {
   private readonly _formErrors: FormErrors
