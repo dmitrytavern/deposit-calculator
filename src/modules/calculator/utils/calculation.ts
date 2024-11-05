@@ -1,6 +1,8 @@
-import { isLeapYear } from '@/uitls/date'
-
 import { Calculation, FormResult, FormSchema } from '../types'
+
+const isLeapYear = (year: number) => {
+  return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0
+}
 
 const calculatePeriod = (form: Readonly<FormSchema>, monthIndex: number) => {
   const initialYear = form.date.getFullYear()
