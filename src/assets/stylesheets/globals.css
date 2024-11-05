@@ -8,12 +8,26 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-input[type=number] {
+input[type='number'] {
   -webkit-appearance: textfield;
   -moz-appearance: textfield;
   appearance: textfield;
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  @apply bg-gradient-to-br from-zinc-50/50 to-blue-100/50;
+}
+
+body::after,
+body::before {
+  content: '';
+  @apply fixed -z-10 w-[480px] h-[480px] rounded-full;
+}
+
+body::after {
+  @apply animate-vibrate-1 top-[3%] left-[5%] bg-blue-500 blur-3xl opacity-15;
+}
+
+body::before {
+  @apply animate-vibrate-2 top-[48%] left-[55%] bg-yellow-500 blur-3xl opacity-15;
 }

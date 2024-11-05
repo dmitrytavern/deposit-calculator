@@ -10,13 +10,20 @@ export const Calculator = () => {
 
   return (
     <CalculatorProvider store={store}>
-      <div className="w-full mx-auto max-w-5xl bg-white overflow-hidden rounded-2xl border-2 border-gray-200">
-        <div className="flex max-md:flex-col">
-          <div className="w-full p-3 pb-7 md:p-8">
-            <CalculatorForm />
+      <div className="w-full rounded-2xl border-2 border-gray-200 bg-white">
+        <div className="flex flex-col gap-7 md:gap-10 px-3 py-7 md:px-7 md:py-10 lg:px-10 lg:py-14">
+          <div className="w-full">
+            <span className="text-3xl md:text-4xl font-medium">
+              Хочу <br /> розрахувати
+            </span>
           </div>
-          <div className="w-full p-3 md:p-8 bg-gray-100">
-            <CalculatorResult />
+          <div className="flex gap-8 md:gap-14 max-lg:flex-col">
+            <div className="w-full">
+              <CalculatorForm />
+            </div>
+            <div className="w-full">
+              <CalculatorResult />
+            </div>
           </div>
         </div>
       </div>

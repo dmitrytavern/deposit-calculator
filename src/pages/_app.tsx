@@ -1,18 +1,27 @@
 import type { AppProps } from 'next/app'
 import { Inter } from 'next/font/google'
 
-import { NextUIProvider } from '@nextui-org/react'
+import { NextUIProvider, Spacer } from '@nextui-org/react'
 
 import '@/assets/stylesheets/globals.css'
+import { Footer } from '@/components/footer'
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'], display: 'swap' })
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <NextUIProvider>
-      <main className={inter.className}>
-        <Component {...pageProps} />
-      </main>
+      <div className={`min-h-[100dvh] flex flex-col ${inter.className}`}>
+        <main className="container lg:max-w-5xl mx-auto px-3 pt-8 md:pt-16">
+          <Component {...pageProps} />
+        </main>
+
+        <Spacer y={4} />
+
+        <div className="mt-auto"></div>
+
+        <Footer />
+      </div>
     </NextUIProvider>
   )
 }

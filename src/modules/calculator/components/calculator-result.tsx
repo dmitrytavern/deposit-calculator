@@ -17,45 +17,104 @@ export const CalculatorResult = observer(function CalculatorResult() {
 
   return (
     <>
-      <p>Ви отримаєте</p>
-      <p className="text-4xl font-semibold">
-        {store.currencySymbol} {formatNumber(store.result.totalAmount)}
-      </p>
+      <div>
+        <div>
+          <span className="text-lg text-zinc-800 font-semibold">
+            Ви отримаєте
+          </span>
+        </div>
+
+        <Spacer y={2} />
+
+        <div className="bg-gradient-to-r from-pink-600 to-blue-600 bg-clip-text text-transparent">
+          <span className="text-5xl font-extrabold tracking-wide">
+            {formatNumber(store.result.totalAmount)}
+          </span>
+          <span className="text-3xl font-extrabold">
+            {store.currencySymbol}
+          </span>
+        </div>
+      </div>
+
       <Spacer y={4} />
 
       <Divider />
 
       <Spacer y={4} />
 
-      <p>Вкладено</p>
-      <p className="text-2xl font-medium">
-        {store.currencySymbol} {formatNumber(store.result.totalInvestedAmount)}
-      </p>
-      <Spacer y={4} />
+      <div>
+        <div>
+          <span className="text-sm text-zinc-800 font-medium">Вкладено</span>
+        </div>
+        <div>
+          <span className="text-2xl font-semibold tracking-wide">
+            {formatNumber(store.result.totalInvestedAmount)}
+          </span>
+          <span className="text-lg font-semibold">{store.currencySymbol}</span>
+        </div>
+      </div>
 
-      <p>Відсотки</p>
-      <p className="text-2xl font-medium">
-        {store.currencySymbol} {formatNumber(store.result.totalPercentAmount)}
-      </p>
-      <Spacer y={4} />
+      <Spacer y={3} />
 
-      <p>Ставка</p>
-      <p className="text-2xl font-medium">
-        {formatNumber(store.result.rate)}% річних
-      </p>
-      <Spacer y={4} />
+      <div>
+        <div>
+          <span className="text-sm text-zinc-800 font-medium">Відсотки</span>
+        </div>
+        <div>
+          <span className="text-2xl font-semibold tracking-wide">
+            {formatNumber(store.result.totalPercentAmount)}
+          </span>
+          <span className="text-lg font-semibold">{store.currencySymbol}</span>
+        </div>
+      </div>
+
+      <Spacer y={3} />
+
+      <div>
+        <div>
+          <span className="text-sm text-zinc-800 font-medium">Ставка</span>
+        </div>
+        <div>
+          <span className="text-2xl font-semibold tracking-wide">
+            {formatNumber(store.result.rate)}%
+          </span>
+        </div>
+      </div>
+
+      <Spacer y={3} />
 
       {store.form.taxIsActive && (
         <>
-          <p>Ставка після сплати податків</p>
-          <p className="text-2xl font-medium">
-            {formatNumber(store.result.rateAfterTax)}% річних
-          </p>
-          <Spacer y={4} />
-          <p>Сплачено податку</p>
-          <p className="text-2xl font-medium">
-            {store.currencySymbol} {formatNumber(store.result.totalTaxAmount)}
-          </p>
+          <div>
+            <div>
+              <span className="text-sm text-zinc-800 font-medium">
+                Ставка після сплати податків
+              </span>
+            </div>
+            <div>
+              <span className="text-2xl font-semibold tracking-wide">
+                {formatNumber(store.result.rateAfterTax)}%
+              </span>
+            </div>
+          </div>
+
+          <Spacer y={3} />
+
+          <div>
+            <div>
+              <span className="text-sm text-zinc-800 font-medium">
+                Сплачено податку
+              </span>
+            </div>
+            <div>
+              <span className="text-2xl font-semibold tracking-wide">
+                {formatNumber(store.result.totalTaxAmount)}
+              </span>
+              <span className="text-lg font-semibold">
+                {store.currencySymbol}
+              </span>
+            </div>
+          </div>
         </>
       )}
     </>
