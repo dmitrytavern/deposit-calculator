@@ -47,8 +47,7 @@ export const CalculatorForm = observer(function CalculatorForm() {
           size="sm"
           variant="bordered"
           type="number"
-          label="Amount"
-          placeholder="Enter your amount"
+          label="Сума депозиту"
           inputMode="decimal"
           min={1}
           max={Number.MAX_SAFE_INTEGER}
@@ -83,8 +82,7 @@ export const CalculatorForm = observer(function CalculatorForm() {
         size="sm"
         variant="bordered"
         type="number"
-        label="Rate"
-        placeholder="Enter your rate"
+        label="Відсоткова ставка"
         inputMode="decimal"
         min={0.01}
         max={100}
@@ -106,8 +104,7 @@ export const CalculatorForm = observer(function CalculatorForm() {
         size="sm"
         variant="bordered"
         type="number"
-        label="Period"
-        placeholder="Enter your period"
+        label="Термін"
         inputMode="decimal"
         min={1}
         max={120}
@@ -123,7 +120,7 @@ export const CalculatorForm = observer(function CalculatorForm() {
       <DatePicker
         size="sm"
         variant="bordered"
-        label="Start date"
+        label="Дата оформлення депозиту"
         isInvalid={date.error}
         errorMessage={date.errorMessage}
         value={dateValue}
@@ -133,11 +130,21 @@ export const CalculatorForm = observer(function CalculatorForm() {
       <Spacer y={4} />
 
       <Checkbox
+        isInvalid={capitalizationIsActive.error}
+        isSelected={capitalizationIsActive.value}
+        onValueChange={(value) => capitalizationIsActive.onChange(value)}
+      >
+        Додавання % до депозиту
+      </Checkbox>
+
+      <Spacer y={4} />
+
+      <Checkbox
         isInvalid={replenishmentIsActive.error}
         isSelected={replenishmentIsActive.value}
         onValueChange={(value) => replenishmentIsActive.onChange(value)}
       >
-        Deposit replenishment
+        Щомісячне поповнення
       </Checkbox>
 
       {replenishmentIsActive.value && (
@@ -148,8 +155,7 @@ export const CalculatorForm = observer(function CalculatorForm() {
             size="sm"
             variant="bordered"
             type="number"
-            label="Replenishment"
-            placeholder="Enter your month replenishment"
+            label="Сума поповнення"
             inputMode="decimal"
             className="ml-7 w-auto"
             min={1}
@@ -165,21 +171,11 @@ export const CalculatorForm = observer(function CalculatorForm() {
       <Spacer y={4} />
 
       <Checkbox
-        isInvalid={capitalizationIsActive.error}
-        isSelected={capitalizationIsActive.value}
-        onValueChange={(value) => capitalizationIsActive.onChange(value)}
-      >
-        Turn on capitalization
-      </Checkbox>
-
-      <Spacer y={4} />
-
-      <Checkbox
         isInvalid={taxIsActive.error}
         isSelected={taxIsActive.value}
         onValueChange={(value) => taxIsActive.onChange(value)}
       >
-        Turn on tax
+        Включити податки
       </Checkbox>
 
       {taxIsActive.value && (
@@ -190,8 +186,7 @@ export const CalculatorForm = observer(function CalculatorForm() {
             size="sm"
             variant="bordered"
             type="number"
-            label="Tax"
-            placeholder="Enter your tax"
+            label="Відсоток податків"
             inputMode="decimal"
             className="ml-7 w-auto"
             min={0.01}

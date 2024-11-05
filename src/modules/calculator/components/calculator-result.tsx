@@ -13,45 +13,46 @@ const formatNumber = (number: number) => numberWithSpaces(toFixed(number))
 export const CalculatorResult = observer(function CalculatorResult() {
   const { store } = useCalculator()
 
-  if (!store.result) return <>Calculation</>
+  if (!store.result) return <>Прораховуємо...</>
 
   return (
     <>
-      <p>Вы получили:</p>
+      <p>Ви отримаєте</p>
       <p className="text-4xl font-semibold">
         {store.currencySymbol} {formatNumber(store.result.totalAmount)}
       </p>
       <Spacer y={4} />
 
       <Divider />
+
       <Spacer y={4} />
 
-      <p>Вложено</p>
+      <p>Вкладено</p>
       <p className="text-2xl font-medium">
         {store.currencySymbol} {formatNumber(store.result.totalInvestedAmount)}
       </p>
       <Spacer y={4} />
 
-      <p>Полученно процентов</p>
+      <p>Відсотки</p>
       <p className="text-2xl font-medium">
         {store.currencySymbol} {formatNumber(store.result.totalPercentAmount)}
       </p>
       <Spacer y={4} />
 
-      <p>Процентная ставка</p>
+      <p>Ставка</p>
       <p className="text-2xl font-medium">
-        {formatNumber(store.result.rate)}% годовых
+        {formatNumber(store.result.rate)}% річних
       </p>
       <Spacer y={4} />
 
       {store.form.taxIsActive && (
         <>
-          <p>Процентная ставка после оплаты налогов</p>
+          <p>Ставка після сплати податків</p>
           <p className="text-2xl font-medium">
-            {formatNumber(store.result.rateAfterTax)}% годовых
+            {formatNumber(store.result.rateAfterTax)}% річних
           </p>
           <Spacer y={4} />
-          <p>Оплачено налогов</p>
+          <p>Сплачено податку</p>
           <p className="text-2xl font-medium">
             {store.currencySymbol} {formatNumber(store.result.totalTaxAmount)}
           </p>
