@@ -2,13 +2,7 @@ import { Divider, Spacer } from '@nextui-org/react'
 import { observer } from 'mobx-react-lite'
 
 import { useCalculator } from '../use-calculator'
-
-const toFixed = (number: number) => +number.toFixed(2)
-
-const numberWithSpaces = (number: number): string =>
-  number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-
-const formatNumber = (number: number) => numberWithSpaces(toFixed(number))
+import { transformNumberToPretty } from '../utilities/transformation'
 
 export const CalculatorResult = observer(function CalculatorResult() {
   const { store } = useCalculator()
@@ -28,7 +22,7 @@ export const CalculatorResult = observer(function CalculatorResult() {
 
         <div className="bg-gradient-to-r from-pink-600 to-blue-600 bg-clip-text text-transparent">
           <span className="text-5xl font-extrabold tracking-wide">
-            {formatNumber(store.result.totalAmount)}
+            {transformNumberToPretty(store.result.totalAmount)}
           </span>
           <span className="text-3xl font-extrabold">
             {store.currencySymbol}
@@ -48,7 +42,7 @@ export const CalculatorResult = observer(function CalculatorResult() {
         </div>
         <div>
           <span className="text-2xl font-semibold tracking-wide">
-            {formatNumber(store.result.totalInvestedAmount)}
+            {transformNumberToPretty(store.result.totalInvestedAmount)}
           </span>
           <span className="text-lg font-semibold">{store.currencySymbol}</span>
         </div>
@@ -62,7 +56,7 @@ export const CalculatorResult = observer(function CalculatorResult() {
         </div>
         <div>
           <span className="text-2xl font-semibold tracking-wide">
-            {formatNumber(store.result.totalPercentAmount)}
+            {transformNumberToPretty(store.result.totalPercentAmount)}
           </span>
           <span className="text-lg font-semibold">{store.currencySymbol}</span>
         </div>
@@ -76,7 +70,7 @@ export const CalculatorResult = observer(function CalculatorResult() {
         </div>
         <div>
           <span className="text-2xl font-semibold tracking-wide">
-            {formatNumber(store.result.rate)}%
+            {transformNumberToPretty(store.result.rate)}%
           </span>
         </div>
       </div>
@@ -93,7 +87,7 @@ export const CalculatorResult = observer(function CalculatorResult() {
             </div>
             <div>
               <span className="text-2xl font-semibold tracking-wide">
-                {formatNumber(store.result.rateAfterTax)}%
+                {transformNumberToPretty(store.result.rateAfterTax)}%
               </span>
             </div>
           </div>
@@ -108,7 +102,7 @@ export const CalculatorResult = observer(function CalculatorResult() {
             </div>
             <div>
               <span className="text-2xl font-semibold tracking-wide">
-                {formatNumber(store.result.totalTaxAmount)}
+                {transformNumberToPretty(store.result.totalTaxAmount)}
               </span>
               <span className="text-lg font-semibold">
                 {store.currencySymbol}

@@ -12,8 +12,11 @@ import {
 import { observer } from 'mobx-react-lite'
 
 import { useCalculator } from '../use-calculator'
-
-const numericValue = (value: number) => (value === 0 ? '' : `${value}`)
+import {
+  transformZeroToEmpty,
+  transformNumberToPretty,
+  transformPrettyNumber,
+} from '../utilities/transformation'
 
 export const CalculatorForm = observer(function CalculatorForm() {
   const { store } = useCalculator()
@@ -46,7 +49,7 @@ export const CalculatorForm = observer(function CalculatorForm() {
         <Input
           size="sm"
           variant="bordered"
-          type="number"
+          type="text"
           label="Сума депозиту"
           inputMode="decimal"
           min={1}
@@ -54,8 +57,10 @@ export const CalculatorForm = observer(function CalculatorForm() {
           isRequired
           isInvalid={amount.error}
           errorMessage={amount.errorMessage}
-          value={numericValue(amount.value)}
-          onValueChange={(value) => amount.onChange(+value)}
+          value={transformNumberToPretty(amount.value)}
+          onValueChange={(value) =>
+            amount.onChange(transformPrettyNumber(value))
+          }
         />
 
         <Spacer x={4} />
@@ -89,7 +94,7 @@ export const CalculatorForm = observer(function CalculatorForm() {
         isRequired
         isInvalid={rate.error}
         errorMessage={rate.errorMessage}
-        value={numericValue(rate.value)}
+        value={transformNumberToPretty(rate.value)}
         onValueChange={(value) => rate.onChange(+value)}
         endContent={
           <div className="pointer-events-none flex items-center">
@@ -111,7 +116,7 @@ export const CalculatorForm = observer(function CalculatorForm() {
         isRequired
         isInvalid={period.error}
         errorMessage={period.errorMessage}
-        value={numericValue(period.value)}
+        value={transformZeroToEmpty(period.value)}
         onValueChange={(value) => period.onChange(+value)}
       />
 
@@ -154,7 +159,7 @@ export const CalculatorForm = observer(function CalculatorForm() {
           <Input
             size="sm"
             variant="bordered"
-            type="number"
+            type="text"
             label="Сума поповнення"
             inputMode="decimal"
             className="ml-7 w-auto"
@@ -162,8 +167,10 @@ export const CalculatorForm = observer(function CalculatorForm() {
             max={Number.MAX_SAFE_INTEGER}
             isInvalid={replenishment.error}
             errorMessage={replenishment.errorMessage}
-            value={numericValue(replenishment.value)}
-            onValueChange={(value) => replenishment.onChange(+value)}
+            value={transformNumberToPretty(replenishment.value)}
+            onValueChange={(value) =>
+              replenishment.onChange(transformPrettyNumber(value))
+            }
           />
         </>
       )}
@@ -193,7 +200,7 @@ export const CalculatorForm = observer(function CalculatorForm() {
             max={100}
             isInvalid={tax.error}
             errorMessage={tax.errorMessage}
-            value={numericValue(tax.value)}
+            value={transformZeroToEmpty(tax.value)}
             onValueChange={(value) => tax.onChange(+value)}
             endContent={
               <div className="pointer-events-none flex items-center">
