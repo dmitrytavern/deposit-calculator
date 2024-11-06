@@ -1,6 +1,4 @@
 export const ArrowDown = ({ size }: { size?: number }) => {
-  console.log(size)
-
   return (
     <svg
       width={size ?? 20}

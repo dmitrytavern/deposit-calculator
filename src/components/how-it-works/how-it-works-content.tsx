@@ -1,35 +1,6 @@
-import { useState } from 'react'
-
 import { Spacer } from '@nextui-org/react'
 
-import { ArrowDown } from './arrow-down'
-
-export function HowItWorks() {
-  const [opened, setOpened] = useState(false)
-
-  const toggleOpened = () => setOpened((previousValue) => !previousValue)
-
-  return (
-    <div className="w-full rounded-2xl border-2 border-gray-200 bg-white">
-      <button
-        className="w-full flex justify-between items-center text-left px-3 py-3 md:px-7 md:py-7"
-        onClick={toggleOpened}
-      >
-        <h1 className="text-xl font-medium">
-          Як працює цей депозитний калькулятор?
-        </h1>
-
-        <span className={`transition-transform ${opened ? 'rotate-180' : ''}`}>
-          <ArrowDown size={28} />
-        </span>
-      </button>
-
-      {opened && <HowItWorksContent />}
-    </div>
-  )
-}
-
-const HowItWorksContent = () => {
+export function HowItWorksContent() {
   return (
     <div className="px-3 pb-3 md:px-7 md:pb-7">
       <h2 className="text-lg font-medium">Основні терміни</h2>

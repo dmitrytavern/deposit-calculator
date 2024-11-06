@@ -1,6 +1,6 @@
 import { Spacer } from '@nextui-org/react'
 
-import { HowItWorks } from '@/components/how-it-works'
+import { HowItWorks } from '@/components/how-it-works/how-it-works'
 import { Calculator } from '@/modules/calculator'
 
 export default function Home() {
