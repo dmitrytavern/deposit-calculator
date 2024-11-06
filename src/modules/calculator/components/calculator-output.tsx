@@ -4,13 +4,13 @@ import { observer } from 'mobx-react-lite'
 import { useCalculator } from '../use-calculator'
 import { transformNumberToPretty } from '../utilities/transformation'
 
-export const CalculatorResult = observer(function CalculatorResult() {
+export const CalculatorOutput = observer(function CalculatorOutput() {
   const { store } = useCalculator()
 
   if (!store.result) return <>Прораховуємо...</>
 
   return (
-    <>
+    <div className="w-full">
       <div>
         <div>
           <span className="text-lg text-zinc-800 font-semibold">
@@ -111,6 +111,6 @@ export const CalculatorResult = observer(function CalculatorResult() {
           </div>
         </>
       )}
-    </>
+    </div>
   )
 })
