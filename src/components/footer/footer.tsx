@@ -3,6 +3,8 @@ import { useRouter } from 'next/router'
 
 import { Spacer } from '@nextui-org/react'
 
+import { GitHubMark } from '@/assets/icons/github-mark'
+
 export const Footer = () => {
   const { pathname } = useRouter()
 
@@ -30,6 +32,18 @@ export const Footer = () => {
           className="font-medium hover:underline"
         >
           Dmitry Tavern
+        </a>
+      </div>
+
+      <Spacer y={2} />
+
+      <div className="flex justify-center">
+        <a
+          href="//github.com/dmitrytavern/deposit-calculator"
+          target="_blank"
+          className="text-zinc-500 hover:text-zinc-600 transition-colors"
+        >
+          <GitHubMark size={24} />
         </a>
       </div>
     </footer>
