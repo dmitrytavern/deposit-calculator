@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <DefaultHead />
       <NextUIProvider>
         <div className={`min-h-[100dvh] flex flex-col ${inter.className}`}>
-          <main className="container lg:max-w-5xl mx-auto px-3 pt-8 md:pt-16">
+          <main className="container lg:max-w-5xl mx-auto px-3 pt-3 md:pt-16 lg:pt-20">
             <Component {...pageProps} />
           </main>
 

@@ -12,10 +12,7 @@ export const Footer = () => {
     <footer className="px-3 py-5 text-xs text-center">
       {pathname !== '/about' && (
         <div>
-          <Link
-            href="/about"
-            className="text-base underline hover:no-underline"
-          >
+          <Link href="/about" className="text-sm underline hover:no-underline">
             Про калькулятор
           </Link>
 

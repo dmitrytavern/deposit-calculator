@@ -20,7 +20,7 @@ export const CalculatorOutput = observer(function CalculatorOutput() {
 
         <Spacer y={2} />
 
-        <div className="bg-gradient-to-r from-pink-600 to-blue-600 bg-clip-text text-transparent">
+        <div className="bg-gradient-to-r from-pink-500 to-blue-500 bg-clip-text text-transparent">
           <span className="text-5xl font-extrabold tracking-wide">
             {transformNumberToPretty(store.result.totalAmount)}
           </span>

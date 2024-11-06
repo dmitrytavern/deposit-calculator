@@ -13,7 +13,7 @@ export function HowItWorks() {
       <HowItWorksButton opened={opened} onClick={toggleOpened} />
 
       {opened && (
-        <div className="px-3 pb-3 md:px-7 md:pb-7">
+        <div className="px-3 pb-3 md:px-10 md:pb-6">
           <HowItWorksContent />
         </div>
       )}

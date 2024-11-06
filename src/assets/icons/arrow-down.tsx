@@ -1,4 +1,9 @@
-export const ArrowDown = ({ size }: { size?: number }) => {
+export interface ArrowDownProps {
+  size?: number
+  className?: string
+}
+
+export const ArrowDown = ({ size, className }: ArrowDownProps) => {
   return (
     <svg
       width={size ?? 20}
@@ -6,6 +11,7 @@ export const ArrowDown = ({ size }: { size?: number }) => {
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
     >
       <path
         d="M10.0995 13.5556L15.7955 7.8594C15.9274 7.72765 16 7.55178 16 7.36426C16 7.17674 15.9274 7.00087 15.7955 6.86912L15.3761 6.44964C15.1029 6.17668 14.6587 6.17668 14.3859 6.44964L9.60265 11.2328L4.81414 6.44433C4.68229 6.31259 4.50653 6.23984 4.31911 6.23984C4.13148 6.23984 3.95571 6.31259 3.82376 6.44433L3.40449 6.86381C3.27264 6.99566 3.2 7.17143 3.2 7.35895C3.2 7.54647 3.27264 7.72234 3.40449 7.85409L9.10575 13.5556C9.23801 13.6876 9.41461 13.7601 9.60234 13.7597C9.7908 13.7601 9.96729 13.6876 10.0995 13.5556Z"

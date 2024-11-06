@@ -2,7 +2,7 @@ import { Spacer } from '@nextui-org/react'
 
 export function HowItWorksContent() {
   return (
-    <div className="px-3 pb-3 md:px-7 md:pb-7">
+    <div>
       <h2 className="text-lg font-medium">Основні терміни</h2>
       <Spacer y={2} />
 
