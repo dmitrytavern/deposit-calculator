@@ -11,21 +11,22 @@ const config: Config = {
   theme: {
     extend: {
       animation: {
-        'vibrate-1': 'vibrate 15s linear infinite',
-        'vibrate-2': 'vibrate 18s linear infinite',
+        'vibrate-1': 'vibrate 25s linear infinite',
+        'vibrate-2': 'vibrate 20s linear infinite',
       },
       keyframes: {
         vibrate: {
-          '0%, 100%': { transform: 'translate(0)' },
-          '10%': { transform: 'translate(-20%, -20%)' },
-          '20%': { transform: 'translate(20%, -20%)' },
-          '30%': { transform: 'translate(-20%, 20%)' },
-          '40%': { transform: 'translate(20%, 20%)' },
-          '50%': { transform: 'translate(-20%, -20%)' },
-          '60%': { transform: 'translate(20%, -20%)' },
-          '70%': { transform: 'translate(-20%, 20%)' },
-          '80%': { transform: 'translate(-20%, -20%)' },
-          '90%': { transform: 'translate(20%, -20%)' },
+          '0%': { transform: 'translate(0, 0)' },
+          '10%': { transform: 'translate(-24%, -24%)' },
+          '20%': { transform: 'translate(24%, -24%)' },
+          '30%': { transform: 'translate(-24%, 24%)' },
+          '40%': { transform: 'translate(24%, 24%)' },
+          '50%': { transform: 'translate(24%, -24%)' },
+          '60%': { transform: 'translate(-24%, 24%)' },
+          '70%': { transform: 'translate(-24%, -24%)' },
+          '80%': { transform: 'translate(24%, -24%)' },
+          '90%': { transform: 'translate(-24%, -24%)' },
+          '100%': { transform: 'translate(0, 0)' },
         }
       }
     },

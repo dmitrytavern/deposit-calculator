@@ -19,19 +19,20 @@ html::-webkit-scrollbar {
 }
 
 body {
-  @apply bg-gradient-to-br from-zinc-50/50 to-blue-100/50;
+  @apply relative z-10 bg-gradient-to-br from-zinc-50/100 to-blue-100/100;
 }
 
 body::after,
 body::before {
   content: '';
-  @apply fixed -z-10 w-[480px] h-[480px] rounded-full;
+  filter: blur(78px);
+  @apply fixed -z-10 w-[540px] h-[540px] rounded-full;
 }
 
 body::after {
-  @apply animate-vibrate-1 top-[3%] left-[5%] bg-blue-500 blur-3xl opacity-15;
+  @apply animate-vibrate-1 top-[8%] left-[8%] bg-blue-500 opacity-20;
 }
 
 body::before {
-  @apply animate-vibrate-2 top-[48%] left-[55%] bg-yellow-500 blur-3xl opacity-15;
+  @apply animate-vibrate-2 top-[40%] left-[57%] bg-yellow-500 opacity-15;
 }
