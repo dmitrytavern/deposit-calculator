@@ -1,10 +1,24 @@
 import Head from 'next/head'
 
+import { useEffect, useState } from 'react'
+
 export const DefaultHead = () => {
+  const [viewport, setViewport] = useState([
+    'width=device-width',
+    'initial-scale=1',
+  ])
+
+  useEffect(() => {
+    // Check if device is ios then disable zoom
+    // @ts-expect-error MSStream not exists
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream)
+      setViewport([...viewport, 'maximum-scale=1.0'])
+  }, [])
+
   return (
     <Head>
       <title>Депозитний калькулятор</title>
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <meta name="viewport" content={viewport.join(', ')} />
       <meta name="application-name" content="Депозитний калькулятор" />
       <meta
         name="description"
